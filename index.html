@@ -1,0 +1,1041 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بەرنامەی ئیسلامی - Islamic App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #333;
+            direction: rtl;
+        }
+
+        body.english {
+            direction: ltr;
+            text-align: left;
+        }
+
+        body.arabic {
+            direction: rtl;
+            text-align: right;
+        }
+
+        body.dark {
+            background: #1a1a2e;
+            color: #eee;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        body.dark .header h1 {
+            color: #66bb6a;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 5px;
+            background: white;
+            border-radius: 25px;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        body.dark .language-selector {
+            background: #2d2d44;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background: transparent;
+            color: #333;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        body.dark .lang-btn {
+            color: #eee;
+        }
+
+        .lang-btn.active {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .theme-toggle {
+            padding: 12px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+        }
+
+        body.dark .theme-toggle {
+            background: #2d2d44;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            background: white;
+            color: #333;
+            transition: all 0.3s;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        body.dark .tab-btn {
+            background: #2d2d44;
+            color: #eee;
+        }
+
+        .tab-btn.active {
+            background: #2e7d32;
+            color: white;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        body.dark .card {
+            background: #2d2d44;
+        }
+
+        /* کاتی ڕاستەقینە */
+        .real-time-clock {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .clock-display {
+            font-size: 56px;
+            font-weight: bold;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .date-display {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .countdown-timer {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+            color: white;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .countdown-display {
+            font-size: 42px;
+            font-weight: bold;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* سوڕەتەکان */
+        .surah-list {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .surah-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        body.dark .surah-item {
+            background: #1a1a2e;
+        }
+
+        .surah-item:hover {
+            background: #2e7d32;
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        body.english .surah-item:hover {
+            transform: translateX(5px);
+        }
+
+        .surah-number {
+            background: #2e7d32;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-left: 15px;
+        }
+
+        body.english .surah-number {
+            margin-left: 0;
+            margin-right: 15px;
+        }
+
+        /* فەرموودەکان */
+        .hadith-item {
+            padding: 20px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 10px;
+            border-right: 4px solid #2e7d32;
+        }
+
+        body.dark .hadith-item {
+            background: #2d2d44;
+        }
+
+        body.english .hadith-item {
+            border-right: none;
+            border-left: 4px solid #2e7d32;
+        }
+
+        /* ژمێرەری زیکر */
+        .counter-display {
+            font-size: 72px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        body.dark .counter-display {
+            color: #66bb6a;
+        }
+
+        .counter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .counter-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 32px;
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .counter-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-plus { background: #2e7d32; }
+        .btn-minus { background: #d32f2f; }
+        .btn-reset { background: #757575; }
+
+        .dhikr-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .dhikr-item {
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            background: #e8f5e9;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        body.dark .dhikr-item {
+            background: #1a1a2e;
+        }
+
+        .dhikr-item:hover {
+            background: #2e7d32;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* پێشەنگی */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            opacity: 0.7;
+            border-top: 1px solid #ddd;
+        }
+
+        body.dark .footer {
+            border-top: 1px solid #444;
+        }
+
+        /* گەڕان */
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #2e7d32;
+            font-size: 16px;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        body.dark .search-box {
+            background: #2d2d44;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .clock-display {
+                font-size: 42px;
+            }
+            
+            .countdown-display {
+                font-size: 32px;
+            }
+            
+            .counter-display {
+                font-size: 56px;
+            }
+            
+            .counter-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+            
+            .tab-btn {
+                padding: 10px 15px;
+                min-width: 100px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <div class="header">
+            <h1 id="app-title">بەرنامەی ئیسلامی</h1>
+            <div class="controls">
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="ku" onclick="changeLanguage('ku')"><h2>کوردی</h2></button>
+                    <button class="lang-btn" data-lang="ar" onclick="changeLanguage('ar')"><h2>عربی</h2></button>
+                    <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')"> <h2>English</h2></button>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="home">
+                <span>🏠</span>
+                <span data-i18n="home">سەرەکی</span>
+            </button>
+            <button class="tab-btn" data-tab="quran">
+                <span>📖</span>
+                <span data-i18n="quran">قورئان</span>
+            </button>
+            <button class="tab-btn" data-tab="hadith">
+                <span>💬</span>
+                <span data-i18n="hadith">فەرموودە</span>
+            </button>
+            <button class="tab-btn" data-tab="dhikr">
+                <span>📿</span>
+                <span data-i18n="dhikr">زیکر</span>
+            </button>
+            <button class="tab-btn" data-tab="tasbih">
+                <span>⭕</span>
+                <span data-i18n="tasbih">تەسبیح</span>
+            </button>
+        </div>
+
+        <div id="home" class="tab-content active">
+            <div class="card real-time-clock">
+                <h2 data-i18n="current_time">کاتی ئێستا</h2>
+                <div class="clock-display" id="current-clock">00:00:00</div>
+                <div class="date-display" id="current-date">یکشنبه 1 فروردین 1403</div>
+            </div>
+
+            <div class="card">
+                <h2 style="text-align: center; margin-bottom: 15px;" data-i18n="countdown_title">کاتی ماوە بۆ نوێژی داھاتوو</h2>
+                <div class="countdown-timer">
+                    <div class="countdown-display" id="countdown-timer">00:00:00</div>
+                    <div id="next-prayer-name" style="font-size: 18px;">نوێژی بەیانی</div>
+                    <div style="margin-top: 10px; font-size: 14px;">
+                        <span data-i18n="time_remaining">کاتی ماوە:</span>
+                        <span id="remaining-time">00:00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 15px;" data-i18n="features">تایبەتمەندییەکان</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div style="text-align: center; padding: 15px; background: #e8f5e9; border-radius: 10px;">
+                        <div style="font-size: 24px;">📖</div>
+                        <div style="font-weight: bold;" data-i18n="quran">قورئان</div>
+                        <div style="font-size: 14px; margin-top: 5px;" data-i18n="quran_desc">١١٤ سورەت</div>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #e8f5e9; border-radius: 10px;">
+                        <div style="font-size: 24px;">💬</div>
+                        <div style="font-weight: bold;" data-i18n="hadith">فەرموودە</div>
+                        <div style="font-size: 14px; margin-top: 5px;" data-i18n="hadith_desc">١٠٠ فەرموودە</div>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #e8f5e9; border-radius: 10px;">
+                        <div style="font-size: 24px;">📿</div>
+                        <div style="font-weight: bold;" data-i18n="dhikr">زیکر</div>
+                        <div style="font-size: 14px; margin-top: 5px;" data-i18n="dhikr_desc">ژمێرەری زیکر</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quran" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; text-align: center;">
+                    <span>📖</span>
+                    <span data-i18n="quran_title">سورەتەکانی قورئان</span>
+                </h2>
+                <input type="text" class="search-box" id="surah-search" placeholder="🔍 گەڕان بە ناوی سورەت...">
+                <div class="surah-list" id="surah-list"></div>
+            </div>
+        </div>
+
+        <div id="hadith" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; text-align: center;">
+                    <span>💬</span>
+                    <span data-i18n="hadith_title">فەرموودەکانی پێغەمبەر (ص)</span>
+                </h2>
+                <input type="text" class="search-box" id="hadith-search" placeholder="🔍 گەڕان لە فەرموودەکان...">
+                <div id="hadith-list"></div>
+            </div>
+        </div>
+
+        <div id="dhikr" class="tab-content">
+            <div class="card" style="text-align: center;">
+                <h2 style="margin-bottom: 20px;">
+                    <span>📿</span>
+                    <span data-i18n="dhikr_title">ژمێرەری زیکر</span>
+                </h2>
+                <div class="counter-display" id="dhikr-count">0</div>
+                
+                <div class="counter-buttons">
+                    <button class="counter-btn btn-plus" onclick="incrementDhikr()">+</button>
+                    <button class="counter-btn btn-minus" onclick="decrementDhikr()">-</button>
+                    <button class="counter-btn btn-reset" onclick="resetDhikr()">↻</button>
+                </div>
+
+                <div class="dhikr-list">
+                    <div class="dhikr-item" onclick="selectDhikr('سبحان الله')">سبحان الله</div>
+                    <div class="dhikr-item" onclick="selectDhikr('الحمد لله')">الحمد لله</div>
+                    <div class="dhikr-item" onclick="selectDhikr('الله أكبر')">الله أكبر</div>
+                    <div class="dhikr-item" onclick="selectDhikr('لا إله إلا الله')">لا إله إلا الله</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tasbih" class="tab-content">
+            <div class="card" style="text-align: center;">
+                <h2 style="margin-bottom: 20px;">
+                    <span>⭕</span>
+                    <span data-i18n="tasbih_title">تەسبیحی ئەلکترۆنی</span>
+                </h2>
+                <div class="counter-display" id="tasbih-count">0</div>
+                
+                <div class="counter-buttons">
+                    <button class="counter-btn btn-plus" onclick="incrementTasbih()">+</button>
+                    <button class="counter-btn btn-minus" onclick="decrementTasbih()">-</button>
+                    <button class="counter-btn btn-reset" onclick="resetTasbih()">↻</button>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <button style="padding: 15px 25px; margin: 8px; background: #2e7d32; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; width: 200px;" 
+                            onclick="setTasbih('سبحان الله', 33)">سبحان الله (33)</button>
+                    <button style="padding: 15px 25px; margin: 8px; background: #2e7d32; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; width: 200px;" 
+                            onclick="setTasbih('الحمد لله', 33)">الحمد لله (33)</button>
+                    <button style="padding: 15px 25px; margin: 8px; background: #2e7d32; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; width: 200px;" 
+                            onclick="setTasbih('الله أكبر', 34)">الله أكبر (34)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p id="footer-text">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ</p>
+            <p style="margin-top: 10px; font-size: 14px;" data-i18n="copyright">© 2024 بەرنامەی ئیسلامی - هەموو مافەکان پارێزراون</p>
+        </div>
+    </div>
+
+    <script>
+        // دەیتای زمانەکان
+        const translations = {
+            ku: {
+                // سەرەکی
+                app_title: "بەرنامەی ئیسلامی",
+                current_time: "کاتی ئێستا",
+                countdown_title: "کاتی ماوە بۆ نوێژی داھاتوو",
+                time_remaining: "کاتی ماوە:",
+                features: "تایبەتمەندییەکان",
+                quran_desc: "١١٤ سورەت",
+                hadith_desc: "١٠٠ فەرموودە",
+                dhikr_desc: "ژمێرەری زیکر",
+                
+                // تابەکان
+                home: "سەرەکی",
+                quran: "قورئان",
+                hadith: "فەرموودە",
+                dhikr: "زیکر",
+                tasbih: "تەسبیح",
+                
+                // پەڕەکان
+                quran_title: "سورەتەکانی قورئان",
+                hadith_title: "فەرموودەکانی پێغەمبەر (ص)",
+                dhikr_title: "ژمێرەری زیکر",
+                tasbih_title: "تەسبیحی ئەلکترۆنی",
+                
+                // نوێژەکان
+                fajr: "بەیانی",
+                dhuhr: "نیوەڕۆ",
+                asr: "عەسر",
+                maghrib: "ئێوارە",
+                isha: "عیشا",
+                
+                // پێشەنگی
+                copyright: "© 2024 بەرنامەی ئیسلامی - هەموو مافەکان پارێزراون"
+            },
+            
+            ar: {
+                app_title: "التطبيق الإسلامي",
+                current_time: "الوقت الحالي",
+                countdown_title: "الوقت المتبقي للصلاة القادمة",
+                time_remaining: "الوقت المتبقي:",
+                features: "المميزات",
+                quran_desc: "١١٤ سورة",
+                hadith_desc: "١٠٠ حديث",
+                dhikr_desc: "عداد الذكر",
+                
+                home: "الرئيسية",
+                quran: "القرآن",
+                hadith: "الحديث",
+                dhikr: "الذكر",
+                tasbih: "التسبيح",
+                
+                quran_title: "سور القرآن الكريم",
+                hadith_title: "أحاديث النبي صلى الله عليه وسلم",
+                dhikr_title: "عداد الذكر",
+                tasbih_title: "المسبحة الإلكترونية",
+                
+                fajr: "الفجر",
+                dhuhr: "الظهر",
+                asr: "العصر",
+                maghrib: "المغرب",
+                isha: "العشاء",
+                
+                copyright: "© 2024 التطبيق الإسلامي - جميع الحقوق محفوظة"
+            },
+            
+            en: {
+                app_title: "Islamic App",
+                current_time: "Current Time",
+                countdown_title: "Time Remaining for Next Prayer",
+                time_remaining: "Time remaining:",
+                features: "Features",
+                quran_desc: "114 Chapters",
+                hadith_desc: "100 Hadiths",
+                dhikr_desc: "Dhikr Counter",
+                
+                home: "Home",
+                quran: "Quran",
+                hadith: "Hadith",
+                dhikr: "Dhikr",
+                tasbih: "Tasbih",
+                
+                quran_title: "Quran Chapters",
+                hadith_title: "Prophet's Hadith",
+                dhikr_title: "Dhikr Counter",
+                tasbih_title: "Electronic Tasbih",
+                
+                fajr: "Fajr",
+                dhuhr: "Dhuhr",
+                asr: "Asr",
+                maghrib: "Maghrib",
+                isha: "Isha",
+                
+                copyright: "© 2024 Islamic App - All Rights Reserved"
+            }
+        };
+
+        // دەیتای سورەتەکان
+        const surahs = [
+            { num: 1, name: "الفاتحة", nameKu: "فاتیحە", nameAr: "الفاتحة", nameEn: "Al-Fatiha", ayahs: 7, type: "مكية" },
+            { num: 2, name: "البقرة", nameKu: "بەقەرە", nameAr: "البقرة", nameEn: "Al-Baqarah", ayahs: 286, type: "مدنية" },
+            { num: 3, name: "آل عمران", nameKu: "ئالی عیمران", nameAr: "آل عمران", nameEn: "Aal-e-Imran", ayahs: 200, type: "مدنية" },
+            { num: 4, name: "النساء", nameKu: "نیسا", nameAr: "النساء", nameEn: "An-Nisa", ayahs: 176, type: "مدنية" },
+            { num: 5, name: "المائدة", nameKu: "مائیدە", nameAr: "المائدة", nameEn: "Al-Ma'idah", ayahs: 120, type: "مدنية" },
+            { num: 6, name: "الأنعام", nameKu: "ئەنعام", nameAr: "الأنعام", nameEn: "Al-An'am", ayahs: 165, type: "مكية" },
+            { num: 7, name: "الأعراف", nameKu: "ئەعراف", nameAr: "الأعراف", nameEn: "Al-A'raf", ayahs: 206, type: "مكية" },
+            { num: 8, name: "الأنفال", nameKu: "ئەنفال", nameAr: "الأنفال", nameEn: "Al-Anfal", ayahs: 75, type: "مدنية" },
+            { num: 9, name: "التوبة", nameKu: "تەوبە", nameAr: "التوبة", nameEn: "At-Tawbah", ayahs: 129, type: "مدنية" },
+            { num: 10, name: "يونس", nameKu: "یوونس", nameAr: "يونس", nameEn: "Yunus", ayahs: 109, type: "مكية" },
+            // سوڕەتەکانی تر...
+            { num: 114, name: "الناس", nameKu: "ناس", nameAr: "الناس", nameEn: "An-Nas", ayahs: 6, type: "مكية" }
+        ];
+
+        // دەیتای فەرموودەکان
+        const hadiths = {
+            ku: [
+                "خێرترین خەڵک ئەوەیە کە سوودبەخشترین بێت بۆ خەڵکی - پێغەمبەر محمد (ص)",
+                "زانست داواکردن فەرزە لەسەر هەموو موسڵمانێک - پێغەمبەر محمد (ص)",
+                "باشترین کەس ئەوەیە کە قورئان فێربێت و فێری خەڵکی بکات - پێغەمبەر محمد (ص)",
+                "موسڵمان براوی موسڵمانە، ستەم لێ ناکات و بەرەڕووی دوژمن نایدات - پێغەمبەر محمد (ص)",
+                "وتەیەکی چاک صەدەقەیە - پێغەمبەر محمد (ص)",
+                "زۆرترین شتێک کە خەڵک دەباتە بەهەشتەوە، ترسی خودا و ئەخلاقی چاکە - پێغەمبەر محمد (ص)"
+            ],
+            ar: [
+                "خير الناس أنفعهم للناس - النبي محمد صلى الله عليه وسلم",
+                "طلب العلم فريضة على كل مسلم - النبي محمد صلى الله عليه وسلم",
+                "خيركم من تعلم القرآن وعلمه - النبي محمد صلى الله عليه وسلم",
+                "المسلم أخو المسلم لا يظلمه ولا يسلمه - النبي محمد صلى الله عليه وسلم",
+                "الكلمة الطيبة صدقة - النبي محمد صلى الله عليه وسلم",
+                "أكثر ما يدخل الناس الجنة تقوى الله وحسن الخلق - النبي محمد صلى الله عليه وسلم"
+            ],
+            en: [
+                "The best of people are those who are most beneficial to people - Prophet Muhammad (PBUH)",
+                "Seeking knowledge is obligatory upon every Muslim - Prophet Muhammad (PBUH)",
+                "The best among you are those who learn the Quran and teach it - Prophet Muhammad (PBUH)",
+                "A Muslim is the brother of a Muslim, he does not wrong him nor surrender him - Prophet Muhammad (PBUH)",
+                "A good word is charity - Prophet Muhammad (PBUH)",
+                "The most frequent thing that leads people to Paradise is piety and good manners - Prophet Muhammad (PBUH)"
+            ]
+        };
+
+        // کاتەکانی نوێژ
+        const prayerTimes = [
+            { name: "fajr", time: "06:01:00" },
+            { name: "dhuhr", time: "12:16:00" },
+            { name: "asr", time: "02:43:00" },
+            { name: "maghrib", time: "05:03:00" },
+            { name: "isha", time: "06:18:00" }
+        ];
+
+        let currentLanguage = 'ku';
+        let dhikrCount = 0;
+        let tasbihCount = 0;
+        let currentTasbih = 'سبحان الله';
+        let tasbihGoal = 33;
+        let countdownInterval = null;
+
+        // گۆڕینی زمان
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // گۆڕینی کلاسی جەستە
+            document.body.classList.remove('english', 'arabic');
+            if (lang === 'en') {
+                document.body.classList.add('english');
+            } else if (lang === 'ar') {
+                document.body.classList.add('arabic');
+            }
+            
+            // گۆڕینی دەقەکان
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // گۆڕینی ناونیشانی بەرنامە
+            document.getElementById('app-title').textContent = translations[lang].app_title;
+            
+            // گۆڕینی دووگمەکانی زمان
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+            
+            // نوێکردنەوەی ناوەڕۆکەکان
+            renderSurahs();
+            renderHadiths();
+            updateNextPrayerName();
+        }
+
+        // گۆڕینی ڕەنگ
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if(document.body.classList.contains('dark')) {
+                icon.textContent = '☀️';
+            } else {
+                icon.textContent = '🌙';
+            }
+        }
+
+        // چالاککردنی تابەکان
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            if (tabName === 'quran') {
+                renderSurahs();
+            } else if (tabName === 'hadith') {
+                renderHadiths();
+            }
+        }
+
+        // نوێکردنەوەی کاتی ڕاستەقینە
+        function updateClock() {
+            const now = new Date();
+            
+            // کات (کاتژمێر:خولەک:چرکە)
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            
+            // بەروار
+            const days = {
+                ku: ['یەکشەممە', 'دووشەممە', 'سێشەممە', 'چوارشەممە', 'پێنجشەممە', 'هەینی', 'شەممە'],
+                ar: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+            };
+            
+            const months = {
+                ku: ['کانوونی دووەم', 'شوبات', 'ئازار', 'نیسان', 'ئایار', 'حوزەیران', 'تەمموز', 'ئاب', 'ئەیلوول', 'تشرینی یەکەم', 'تشرینی دووەم', 'کانوونی یەکەم'],
+                ar: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+                en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+            };
+            
+            const dayName = days[currentLanguage][now.getDay()];
+            const monthName = months[currentLanguage][now.getMonth()];
+            const dateString = currentLanguage === 'en' 
+                ? `${dayName}, ${monthName} ${now.getDate()}, ${now.getFullYear()}`
+                : `${dayName}، ${now.getDate()} ${monthName} ${now.getFullYear()}`;
+            
+            document.getElementById('current-clock').textContent = timeString;
+            document.getElementById('current-date').textContent = dateString;
+            
+            // نوێکردنەوەی کاتی ماوە
+            updateCountdown();
+        }
+
+        // نوێکردنەوەی کاتی ماوە بۆ نوێژی داھاتوو
+        function updateCountdown() {
+            const now = new Date();
+            const currentTime = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+            
+            // بینینی نوێژی داھاتوو
+            let nextPrayer = null;
+            let nextPrayerTime = null;
+            
+            for (const prayer of prayerTimes) {
+                const [hours, minutes, seconds] = prayer.time.split(':').map(Number);
+                const prayerTime = hours * 3600 + minutes * 60 + seconds;
+                
+                if (prayerTime > currentTime) {
+                    nextPrayer = prayer;
+                    nextPrayerTime = prayerTime;
+                    break;
+                }
+            }
+            
+            // ئەگەر هەموو نوێژەکان تەواوبوون، بڕۆ بۆ نوێژی بەیانی
+            if (!nextPrayer) {
+                nextPrayer = prayerTimes[0];
+                const [hours, minutes, seconds] = nextPrayer.time.split(':').map(Number);
+                nextPrayerTime = hours * 3600 + minutes * 60 + seconds + 24 * 3600; // زیادکردنی ٢٤ کاتژمێر
+            }
+            
+            // کاتی ماوە
+            const timeRemaining = nextPrayerTime - currentTime;
+            const hoursRemaining = Math.floor(timeRemaining / 3600);
+            const minutesRemaining = Math.floor((timeRemaining % 3600) / 60);
+            const secondsRemaining = timeRemaining % 60;
+            
+            const countdownString = `${String(hoursRemaining).padStart(2, '0')}:${String(minutesRemaining).padStart(2, '0')}:${String(secondsRemaining).padStart(2, '0')}`;
+            
+            document.getElementById('countdown-timer').textContent = countdownString;
+            document.getElementById('remaining-time').textContent = countdownString;
+            
+            updateNextPrayerName(nextPrayer.name);
+        }
+
+        // نوێکردنەوەی ناوی نوێژی داھاتوو
+        function updateNextPrayerName(prayerName = 'fajr') {
+            const prayerNames = {
+                fajr: translations[currentLanguage].fajr,
+                dhuhr: translations[currentLanguage].dhuhr,
+                asr: translations[currentLanguage].asr,
+                maghrib: translations[currentLanguage].maghrib,
+                isha: translations[currentLanguage].isha
+            };
+            
+            document.getElementById('next-prayer-name').textContent = prayerNames[prayerName];
+        }
+
+        // بارکردنی سورەتەکان
+        function renderSurahs() {
+            const container = document.getElementById('surah-list');
+            const searchTerm = document.getElementById('surah-search').value.toLowerCase();
+            
+            let filteredSurahs = surahs;
+            if (searchTerm) {
+                filteredSurahs = surahs.filter(surah => {
+                    if (currentLanguage === 'ku') return surah.nameKu.toLowerCase().includes(searchTerm);
+                    if (currentLanguage === 'ar') return surah.nameAr.toLowerCase().includes(searchTerm);
+                    if (currentLanguage === 'en') return surah.nameEn.toLowerCase().includes(searchTerm);
+                    return false;
+                });
+            }
+            
+            container.innerHTML = filteredSurahs.map(surah => {
+                let nameKey = 'nameKu';
+                if (currentLanguage === 'ar') nameKey = 'nameAr';
+                if (currentLanguage === 'en') nameKey = 'nameEn';
+                
+                let ayahText = 'ئایەت';
+                if (currentLanguage === 'ar') ayahText = 'آية';
+                if (currentLanguage === 'en') ayahText = 'verses';
+                
+                return `
+                    <div class="surah-item">
+                        <div class="surah-number">${surah.num}</div>
+                        <div style="flex-grow: 1;">
+                            <div style="font-weight: bold; font-size: 16px;">${surah[nameKey]}</div>
+                            <div style="color: #666; font-size: 14px;">${surah.name}</div>
+                        </div>
+                        <div style="color: #666; font-size: 14px;">${surah.ayahs} ${ayahText}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // بارکردنی فەرموودەکان
+        function renderHadiths() {
+            const container = document.getElementById('hadith-list');
+            const searchTerm = document.getElementById('hadith-search').value.toLowerCase();
+            
+            let filteredHadiths = hadiths[currentLanguage];
+            if (searchTerm) {
+                filteredHadiths = hadiths[currentLanguage].filter(hadith => 
+                    hadith.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            container.innerHTML = filteredHadiths.map(hadith => `
+                <div class="hadith-item">
+                    <p style="font-size: 16px; line-height: 1.8;">${hadith}</p>
+                </div>
+            `).join('');
+        }
+
+        // گەڕان لە سورەتەکان
+        function searchSurah() {
+            renderSurahs();
+        }
+
+        // گەڕان لە فەرموودەکان
+        function searchHadith() {
+            renderHadiths();
+        }
+
+        // فەنکشنەکانی ژمێرەری زیکر
+        function incrementDhikr() {
+            dhikrCount++;
+            document.getElementById('dhikr-count').textContent = dhikrCount;
+        }
+
+        function decrementDhikr() {
+            if (dhikrCount > 0) {
+                dhikrCount--;
+                document.getElementById('dhikr-count').textContent = dhikrCount;
+            }
+        }
+
+        function resetDhikr() {
+            dhikrCount = 0;
+            document.getElementById('dhikr-count').textContent = dhikrCount;
+        }
+
+        function selectDhikr(text) {
+            alert(text);
+        }
+
+        // فەنکشنەکانی تەسبیح
+        function incrementTasbih() {
+            tasbihCount++;
+            document.getElementById('tasbih-count').textContent = tasbihCount;
+            
+            if (tasbihCount === tasbihGoal) {
+                alert(`${tasbihGoal} جار ${currentTasbih} تەواو کرد!`);
+            }
+        }
+
+        function decrementTasbih() {
+            if (tasbihCount > 0) {
+                tasbihCount--;
+                document.getElementById('tasbih-count').textContent = tasbihCount;
+            }
+        }
+
+        function resetTasbih() {
+            tasbihCount = 0;
+            document.getElementById('tasbih-count').textContent = tasbihCount;
+        }
+
+        function setTasbih(text, goal) {
+            currentTasbih = text;
+            tasbihGoal = goal;
+            tasbihCount = 0;
+            document.getElementById('tasbih-count').textContent = tasbihCount;
+            alert(`${goal} جار ${text}`);
+        }
+
+        // دەستپێکردن
+        document.addEventListener('DOMContentLoaded', function() {
+            // دەستپێکردنی زمان
+            changeLanguage('ku');
+            
+            // چالاککردنی تابەکان
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    showTab(tabName);
+                });
+            });
+            
+            // دەستپێکردنی کاتی ڕاستەقینە
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            // دەستپێکردنی چرکەژمێر
+            if (countdownInterval) clearInterval(countdownInterval);
+            countdownInterval = setInterval(updateCountdown, 1000);
+            
+            // چالاککردنی گەڕان
+            document.getElementById('surah-search').addEventListener('keyup', searchSurah);
+            document.getElementById('hadith-search').addEventListener('keyup', searchHadith);
+            
+            // بارکردنی سەرەتایی
+            renderSurahs();
+            renderHadiths();
+        });
+    </script>
+</body>
+</html>
+
+
+
+</body>
+</html>
